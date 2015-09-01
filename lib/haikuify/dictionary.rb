@@ -5,7 +5,6 @@ module Haikuify
     def initialize
       @dictionary = {}
       parse
-      self
     end
 
     def count_syllables(word)

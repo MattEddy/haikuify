@@ -1,5 +1,7 @@
 module Haikuify
   class Haiku
+    attr_reader :content
+
     def initialize
       @content = []
     end
@@ -21,17 +23,11 @@ module Haikuify
     end
 
     def complete?
-      if content.length == 3
-        true
-      end
+      content.length == 3
     end
 
     def to_s
       content.join("\n")
     end
-
-    private
-
-    attr_reader :content
   end
 end

@@ -2,23 +2,44 @@ require "spec_helper"
 
 module Haikuify
   describe HaikuBuilder do
-    let(:instance) { described_class.new }
     describe "#build" do
       it "returns a complete haiku if called with the correct components" do
-        instance.build("I wake reluctant")
-        instance.build("Too cold to get out of bed")
-        expect(instance.build("But I need to pee").complete?).to be_truthy
+        instance = described_class.new([
+          "I wake reluctant",
+          "Too cold to get out of bed",
+          "But I need to pee"
+        ])
+        expect(instance.next_haiku.complete?).to be_truthy
       end
 
-      it "returns an incomplete haiku if not called with enough input" do
-        instance.build("I wake reluctant")
-        expect(instance.build("Too cold to get out of bed").complete?).to be_falsey
+      it "returns false if not called with enough input potential input" do
+        instance = described_class.new([
+          "I wake reluctant",
+          "Too cold to get out of bed"
+        ])
+        expect(instance.next_haiku).to be_falsey
       end
 
-      it "returns an incomplete haiku if called with bad input" do
-        instance.build("I wake reluctant")
-        instance.build("Too cold to get out of bed")
-        expect(instance.build("But I need to pee hard").complete?).to be_falsey
+      it "will not build a haiku without proper data" do
+        instance = described_class.new([
+          "I wake reluctant",
+          "Too cold to get out of bed",
+          "But I need to pee pee"
+        ])
+        expect(instance.next_haiku).to be_falsey
+      end
+
+      it "will build multiple haikus if called more than once" do
+        instance = described_class.new([
+          "I wake reluctant",
+          "Too cold to get out of bed",
+          "But I need to pee",
+          "I wake reluctant",
+          "Too cold to get out of bed",
+          "But I need to bee"
+        ])
+        instance.next_haiku
+        expect(instance.next_haiku.content[2]).to eq "But I need to bee"
       end
     end
   end
